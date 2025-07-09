@@ -12,6 +12,8 @@ const App: React.FC = () => {
   const [sort, setSort] = useState<string>('');
 
   const itemsPerPage = 20;
+  const apiRrl="https://thunderous-gnome-e373b6.netlify.app";
+  // const apiRrl="http://localhost:5000"
 
   // Fetch products
   const fetchProducts = useCallback(async () => {
@@ -19,7 +21,7 @@ const App: React.FC = () => {
     setError(null);
     try {
       const response = await axios.get<{ data: IProduct[]; total: number }>(
-        `http://localhost:5000/api/products?page=${page}&limit=${itemsPerPage}&sort=${sort}`
+        `${apiRrl}/api/products?page=${page}&limit=${itemsPerPage}&sort=${sort}`
       );
       setProducts(response.data.data);
       setTotalPages(Math.ceil(response.data.total / itemsPerPage));
@@ -39,7 +41,7 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      await axios.post('http://localhost:5000/api/products/generate');
+      await axios.post(`${apiRrl}/api/products/generate`);
       setPage(1);
       await fetchProducts();
     } catch (err) {
@@ -70,7 +72,7 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      await axios.patch('http://localhost:5000/api/products/reduce');
+      await axios.patch(`${apiRrl}/api/products/reduce`);
       await fetchProducts();
     } catch (err) {
       const axiosError = err as AxiosError<{ error: string }>;
@@ -88,7 +90,7 @@ const App: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      await axios.patch('http://localhost:5000/api/products/increase-even');
+      await axios.patch(`${apiRrl}/api/products/increase-even`);
       await fetchProducts();
     } catch (err) {
       const axiosError = err as AxiosError<{ error: string }>;
